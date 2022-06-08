@@ -1,46 +1,87 @@
 import * as http from 'http';
 
-const markup = `
+const { PORT = 3000 } = process.env;
+
+const mainPageMarkup = `
   <!DOCTYPE html>
   <html>
   <head>
-    <title>Я просто код</title>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <title>Список дел</title>
     <style>
-      .container {
-        max-width: 500px;
+      html, body {
+        font-family: Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        height: 100%;
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        margin: 0;
+      }
+
+      input, button {
+        border: none;
+      }
+
+      .container {
+        width: 468px;
         margin: 0 auto;
         padding-top: 100px;
       }
 
-      p {
-        font-family: sans-serif;
-        font-size: 90px;
-        margin: 0;
+      h1 {
+        font-weight: bold;
       }
 
-      img {
-        width: 512px;
-        margin-top: 50px;
+      .input {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .input__text {
+        font-size: 0.8em;
+        width: 310px;
+        height: 50px;
+        border-bottom: 1px solid #f1f1f1;
+        padding: 0 10px;
+        box-sizing: border-box;
+      }
+
+      .input__elem_text::placeholder {
+        color: #d3d3d3;
+      }
+
+      .input__btn {
+        font-size: 0.8em;
+        width: 150px;
+        height: 50px;
+        background-color: #ffdb4d;
+        border-radius: 2px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <p>Я бы обнял тебя — но&nbsp;— я просто код</p>
-      <img src="https://pictures.s3.yandex.net/code.gif" alt="мой код">
-    </div>
+    <form class="container">
+      <h1>Список дел</h1>
+      <div class="input">
+        <input type="text" placeholder="Дело" class="input__text" name="item">
+        <button class="input__btn input__btn_add">
+          Добавить
+        </button>
+      </div>
+    </form>
   </body>
   </html>
 `;
 
-const server = http.createServer((res) => {
-  res.writeHead(200, {'Content-Type': 'text/html; charset=utf8'}
-);
-  res.end(markup, 'utf8');
-  const { PORT=3000 } = process.env; 
+const server = http.createServer((reg, res) => {
+  res.writeHead(200, {
+  'Content-Type': 'text/html'
+});
 
-  server.listen(PORT)})  
+res.end(mainPageMarkup, 'utf8');
+})
+
+server.listen(PORT)
