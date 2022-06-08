@@ -1,6 +1,6 @@
-import * as http from 'http';
+import * as http from "http";
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, BASE_PATH } = process.env;
 
 const mainPageMarkup = `
   <!DOCTYPE html>
@@ -63,7 +63,7 @@ const mainPageMarkup = `
     </style>
   </head>
   <body>
-    <form class="container">
+    <form class="container" method="POST" action="${BASE_PATH}/submit" enctype="text/plain">
       <h1>Список дел</h1>
       <div class="input">
         <input type="text" placeholder="Дело" class="input__text" name="item">
@@ -76,12 +76,16 @@ const mainPageMarkup = `
   </html>
 `;
 
-const server = http.createServer((reg, res) => {
-  res.writeHead(200, {
+const server = http.createServer((req, res) => {
+  if (req.url === '/' && req.method === 'GET')
+  {
+    res.writeHead(200, {
   'Content-Type': 'text/html'
 });
 
-res.end(mainPageMarkup, 'utf8');
-})
+    res.end(mainPageMarkup);
+  }
+  })
 
-server.listen(PORT)
+
+server.listen(3000)
